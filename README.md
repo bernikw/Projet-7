@@ -1,0 +1,2 @@
+# Projet-7
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1b09312fa054bc8917d386bc3f16bc5)](https://app.codacy.com/gh/bernikw/Projet-7?utm_source=github.com&utm_medium=referral&utm_content=bernikw/Projet-7&utm_campaign=Badge_Grade_Settings)
