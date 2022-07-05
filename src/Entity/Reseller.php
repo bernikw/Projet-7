@@ -9,9 +9,15 @@ use App\Repository\ResellerRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use ApiPlatform\Core\Annotation\ApiResource;
+
 
 #[ORM\Entity(repositoryClass: ResellerRepository::class)]
 #[UniqueEntity(fields: ["email"], message: "Cet email existe déjà")]
+#[ApiResource(
+    collectionOperations:['post'],
+    itemOperations:[]
+)]
 class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

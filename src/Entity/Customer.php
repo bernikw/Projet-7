@@ -4,8 +4,13 @@ namespace App\Entity;
 
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[ApiResource(
+    collectionOperations:['get', 'post'],
+    itemOperations:['get', 'delete']
+)]
 class Customer
 {
     #[ORM\Id]

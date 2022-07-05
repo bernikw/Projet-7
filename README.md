@@ -1,4 +1,4 @@
-# Projet BileMO
+# Projet BileMo
 ---
 
 ## Codacy Badge
