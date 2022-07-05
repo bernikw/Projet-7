@@ -24,8 +24,26 @@ class Phone
     #[ORM\Column(type: 'integer')]
     private $price;
 
-    #[ORM\Column(type: 'text')]
-    private $description;
+    #[ORM\Column(type: 'integer')]
+    private $reference;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $brand;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $color;
+
+    #[ORM\Column(type: 'integer')]
+    private $screenSize;
+
+    #[ORM\Column(type: 'integer')]
+    private $weight;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $operatingSystem;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $status;
 
     public function getId(): ?int
     {
@@ -56,14 +74,86 @@ class Phone
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getReference(): ?int
     {
-        return $this->description;
+        return $this->reference;
     }
 
-    public function setDescription(string $description): self
+    public function setReference(int $reference): self
     {
-        $this->description = $description;
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getBrand(): ?string
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(string $brand): self
+    {
+        $this->brand = $brand;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    public function getScreenSize(): ?int
+    {
+        return $this->screenSize;
+    }
+
+    public function setScreenSize(int $screenSize): self
+    {
+        $this->screenSize = $screenSize;
+
+        return $this;
+    }
+
+    public function getWeight(): ?int
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(int $weight): self
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function getOperatingSystem(): ?string
+    {
+        return $this->operatingSystem;
+    }
+
+    public function setOperatingSystem(string $operatingSystem): self
+    {
+        $this->operatingSystem = $operatingSystem;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
