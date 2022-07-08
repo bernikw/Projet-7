@@ -39,15 +39,15 @@ final class PhoneFactory extends ModelFactory
     {
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
-            'name' => self::faker()->text(),
-            'price' => self::faker()->randomNumber(),
-            'reference' => self::faker()->randomNumber(),
-            'brand' => self::faker()->text(),
-            'color' => self::faker()->text(),
-            'screenSize' => self::faker()->randomNumber(),
-            'weight' => self::faker()->randomNumber(),
-            'operatingSystem' => self::faker()->text(),
-            'status' => self::faker()->text(),
+            'name' => self::faker()->name(),
+            'price' => self::faker()->numberBetween(80, 500),
+            'reference' => self::faker()->isbn13(),
+            'brand' => self::faker()->company(),
+            'color' => self::faker()->colorName(),
+            'screenSize' => self::faker()->numberBetween(5, 8),
+            'weight' => self::faker()->numberBetween(129, 150),
+            'operatingSystem' => self::faker()->word(),
+            'status' => self::faker()->boolean(1),
         ];
     }
 

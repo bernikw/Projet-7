@@ -12,9 +12,11 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        CustomerFactory::new()->createMany(20);
-        PhoneFactory::new()->createMany(50);
+
         ResellerFactory::new()->createMany(10);
+        CustomerFactory::new()->createMany(50);
+        PhoneFactory::new()->createMany(50);
+       
 
         $manager->flush();
     }

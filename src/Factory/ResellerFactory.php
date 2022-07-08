@@ -39,10 +39,10 @@ final class ResellerFactory extends ModelFactory
     {
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
-            'email' => self::faker()->text(),
+            'email' => self::faker()->email(),
             'roles' => [],
-            'password' => self::faker()->text(),
-            'company' => self::faker()->text(),
+            'password' => self::faker()->word(),
+            'company' => self::faker()->company('name'),
         ];
     }
 

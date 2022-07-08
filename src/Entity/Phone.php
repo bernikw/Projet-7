@@ -42,7 +42,7 @@ class Phone
     #[ORM\Column(type: 'string', length: 255)]
     private $operatingSystem;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'boolean')]
     private $status;
 
     public function getId(): ?int
@@ -146,12 +146,12 @@ class Phone
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?bool
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(bool $status): self
     {
         $this->status = $status;
 
