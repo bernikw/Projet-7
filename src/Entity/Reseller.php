@@ -20,6 +20,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
 )]
 class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+        private $pleinPassword;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -91,6 +94,18 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getPleinPassword(): string
+    {
+        return $this->pleinPassword;
+    }
+
+    public function setPleinPassword(string $pleinPassword): self
+    {
+        $this->pleinPassword = $pleinPassword;
+
+        return $this;
+    }
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -112,7 +127,9 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
+
+         return $this;
     }
 
     public function getCompany(): ?string

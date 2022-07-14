@@ -7,6 +7,7 @@ use App\Repository\ResellerRepository;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @extends ModelFactory<Reseller>
@@ -28,9 +29,11 @@ use Zenstruck\Foundry\Proxy;
  */
 final class ResellerFactory extends ModelFactory
 {
-    public function __construct()
+    private UserPasswordHasherInterface $passwordHasher;
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         parent::__construct();
+        $this->passwordHasher = $passwordHasher;
 
         // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
     }
@@ -41,7 +44,7 @@ final class ResellerFactory extends ModelFactory
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'email' => self::faker()->email(),
             'roles' => [],
-            'password' => self::faker()->word(),
+            'pleinPassword' => 'tada',
             'company' => self::faker()->company('name'),
         ];
     }
@@ -50,7 +53,13 @@ final class ResellerFactory extends ModelFactory
     {
         // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
-            // ->afterInstantiate(function(Reseller $reseller): void {})
+             ->afterInstantiate(function(Reseller $reseller) {
+                if ($reseller->getPleinPassword()) {
+                    $reseller->setPassword(
+                        $this->passwordHasher->hashPassword($reseller, $reseller->getPleinPassword())
+                    );
+                }
+             })
         ;
     }
 
