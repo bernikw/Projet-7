@@ -33,7 +33,7 @@ class Customer
     #[ORM\Column(type: 'string', length: 255)]
     private $adress;
 
-    #[ORM\ManyToOne(targetEntity: Reseller::class, inversedBy: 'customers')]
+    #[ORM\ManyToOne(targetEntity: Reseller::class, inversedBy: 'customers',  cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private $reseller;
 
