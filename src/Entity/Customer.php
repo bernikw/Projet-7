@@ -5,8 +5,11 @@ namespace App\Entity;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[UniqueEntity(fields: ["email"], message: "Cet email existe déjà")]
 #[ApiResource(
     collectionOperations:['get', 'post'],
     itemOperations:['get', 'delete']
@@ -19,12 +22,19 @@ class Customer
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Assert\Length(min:3, max:20)]
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Assert\Length(min:3, max:20)]
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Email(
+        message: 'Cet e-mail {{ value }} n\'est pas un e-mail valide.',
+    )]
     private $email;
 
     #[ORM\Column(type: 'datetime_immutable')]
