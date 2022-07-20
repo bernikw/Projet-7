@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ResellerRepository::class)]
 #[UniqueEntity(fields: ["email"], message: "Cet email existe déjà")]
 #[ApiResource(
-    collectionOperations:['post'],
+    collectionOperations:['post'=> ['path' =>'/register']],
     itemOperations:[]
 )]
 class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
@@ -40,6 +40,7 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     #[Assert\Regex(
         pattern: '^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$^',
         message: 'Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial !',
@@ -47,6 +48,7 @@ class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $company;
 
     #[ORM\OneToMany(mappedBy: 'reseller', targetEntity: Customer::class)]

@@ -3,6 +3,7 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+   
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
@@ -41,7 +42,8 @@ security:
           #  jwt: ~
              
              
-       # main:
+        main:
+            
            # anonymous: true
            # lazy: true
            # provider: app_user_provider
@@ -59,7 +61,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/api/login, roles: PUBLIC_ACCESS }
-         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+         - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+         
 
 when@test:
     security:

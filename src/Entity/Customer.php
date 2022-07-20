@@ -7,40 +7,63 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[UniqueEntity(fields: ["email"], message: "Cet email existe déjà")]
 #[ApiResource(
-    collectionOperations:['get', 'post'],
-    itemOperations:['get', 'delete']
+    normalizationContext:['groups'=> ['customer:read']],
+    denormalizationContext:['groups'=> ['customer:write']],
+    collectionOperations:[
+        'get' => ["normalization_context"=> ['groups'=> ['customer:read']]],//=>['security'=> 'is_granted("ROLE_USER") and object.owner == user',
+       // 'security_message' => 'Connectez-vous pour acceder à cette ressources'
+   // ],
+        'post'
+    ],
+    itemOperations:[
+        'get'=> ["normalization_context"=> ['groups'=> ['customer:read']]],//=>['security'=> 'is_granted("ROLE_USER") and object.owner == user',
+        //'security_message' => 'Connectez-vous pour acceder à cette ressources'
+    //],
+        'delete'//=>['security'=> 'is_granted("ROLE_USER") and object.owner == user'],
+        //'security_message' => 'Connectez-vous pour acceder à cette ressources'
+    ],
+    attributes: ["pagination_items_per_page" => 10]
 )]
 class Customer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['customer:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
-    #[Assert\Length(min:3, max:20)]
+    #[Assert\Length(min:3, 
+                    max:20,)]
+    #[Groups(['customer:read'])]
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
-    #[Assert\Length(min:3, max:20)]
+    #[Assert\Length(min:3, 
+                    max:20,)]
+    #[Groups(['customer:read', 'customer:write'])]
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Email(
         message: 'Cet e-mail {{ value }} n\'est pas un e-mail valide.',
     )]
+    #[Groups(['customer:read', 'customer:write'])]
     private $email;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['customer:read', 'customer:write'])]
     private $createdAt;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['customer:read', 'customer:write'])]
     private $adress;
 
     #[ORM\ManyToOne(targetEntity: Reseller::class, inversedBy: 'customers',  cascade: ['persist'])]

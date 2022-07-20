@@ -5,11 +5,13 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PhoneRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PhoneRepository::class)]
 #[ApiResource(
     collectionOperations:['get'],
-    itemOperations:['get']
+    itemOperations:['get'],
+    attributes: ["pagination_items_per_page" => 5]
 )]
 class Phone
 {
@@ -19,30 +21,39 @@ class Phone
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $name;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $price;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $reference;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $brand;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $color;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $screenSize;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $weight;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $operatingSystem;
 
     #[ORM\Column(type: 'boolean')]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     private $status;
 
     public function getId(): ?int
