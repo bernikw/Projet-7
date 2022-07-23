@@ -17,12 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: ["email"], message: "Cet email existe déjà")]
 #[ApiResource(
     collectionOperations:['post'=> ['path' =>'/register']],
-    itemOperations:[]
+    itemOperations:['get']
 )]
 class Reseller implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
-        private $pleinPassword;
+    private $pleinPassword;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

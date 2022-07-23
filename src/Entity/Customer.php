@@ -12,62 +12,68 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[UniqueEntity(fields: ["email"], message: "Cet email existe déjà")]
 #[ApiResource(
-    normalizationContext:['groups'=> ['customer:read']],
-    denormalizationContext:['groups'=> ['customer:write']],
+    normalizationContext:['groups'=> ['read:Customer']],
+    denormalizationContext:['groups'=> ['write:Customer']],
     collectionOperations:[
-        'get' => ["normalization_context"=> ['groups'=> ['customer:read']]],//=>['security'=> 'is_granted("ROLE_USER") and object.owner == user',
-       // 'security_message' => 'Connectez-vous pour acceder à cette ressources'
-   // ],
-        'post'
+        'get' => ["normalization_context"=> ['groups'=> ['read:Customer']]],
+        'post' => ["denormalization_context" =>['groups'=> ['write:Customer']]],
     ],
     itemOperations:[
-        'get'=> ["normalization_context"=> ['groups'=> ['customer:read']]],//=>['security'=> 'is_granted("ROLE_USER") and object.owner == user',
-        //'security_message' => 'Connectez-vous pour acceder à cette ressources'
-    //],
-        'delete'//=>['security'=> 'is_granted("ROLE_USER") and object.owner == user'],
-        //'security_message' => 'Connectez-vous pour acceder à cette ressources'
+        'get'=> ["normalization_context"=> ['groups'=> ['read:Customer']]],
+    
+        'delete'=> ["denormalization_context" =>['groups'=> ['write:Customer']]],
     ],
-    attributes: ["pagination_items_per_page" => 10]
+    attributes: [
+        "pagination_partial" => true,
+        "pagination-via-cursor" => ["field" => "id", "direction" => "DESC"],
+        "pagination_items_per_page" => 10]
 )]
 class Customer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['customer:read'])]
+    #[Groups(['read:Customer'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     #[Assert\Length(min:3, 
                     max:20,)]
-    #[Groups(['customer:read'])]
+    #[Groups(['read:Customer'])]
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     #[Assert\Length(min:3, 
                     max:20,)]
-    #[Groups(['customer:read', 'customer:write'])]
+    #[Groups(['read:Customer', 'write:Customer'])]
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
     #[Assert\Email(
         message: 'Cet e-mail {{ value }} n\'est pas un e-mail valide.',
     )]
-    #[Groups(['customer:read', 'customer:write'])]
+    #[Groups(['read:Customer', 'write:Customer'])]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Assert\Email(
+        message: 'Cet e-mail {{ value }} n\'est pas un e-mail valide.',
+    )]
     private $email;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['customer:read', 'customer:write'])]
+    #[Groups(['read:Customer', 'write:Customer'])]
     private $createdAt;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['customer:read', 'customer:write'])]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Customer', 'write:Customer'])]
     private $adress;
 
     #[ORM\ManyToOne(targetEntity: Reseller::class, inversedBy: 'customers',  cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read:Customer'])]
     private $reseller;
 
     public function getId(): ?int

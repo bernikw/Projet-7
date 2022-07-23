@@ -6,11 +6,16 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PhoneRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PhoneRepository::class)]
-#[ApiResource(
-    collectionOperations:['get'],
-    itemOperations:['get'],
+#[ApiResource(  
+    collectionOperations:[
+        'get'=> ["normalization_context"=> ['groups'=> ['read:Phone']]],
+    ],
+    itemOperations:[
+        'get'=> ["normalization_context"=> ['groups'=> ['read:Phone']]],
+    ],
     attributes: ["pagination_items_per_page" => 5]
 )]
 class Phone
@@ -18,42 +23,52 @@ class Phone
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read:Phone'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $name;
 
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $price;
 
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $reference;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $brand;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $color;
 
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $screenSize;
 
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $weight;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $operatingSystem;
 
     #[ORM\Column(type: 'boolean')]
     #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Groups(['read:Phone'])]
     private $status;
 
     public function getId(): ?int
