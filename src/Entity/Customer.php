@@ -26,9 +26,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     attributes: [
         "pagination_partial" => true,
         "pagination-via-cursor" => ["field" => "id", "direction" => "DESC"],
-        "pagination_items_per_page" => 10]
+        "pagination_items_per_page" => 10],
+        security: "is_granted('IS_AUTHENTICATED_FULLY')"
 )]
-class Customer
+class Customer 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

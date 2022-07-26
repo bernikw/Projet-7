@@ -18,6 +18,9 @@ security:
             security: false
 
         api:
+            login_throttling: 
+                max_attempts: 3
+                interval: '1 minute'
             pattern: ^/api
             stateless: true
             entry_point: jwt
@@ -27,6 +30,8 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
+           
+            
 
 
        # login:
@@ -43,8 +48,7 @@ security:
           #  jwt: ~
              
              
-        main:
-            login_throttling: true
+   
             
            # anonymous: true
            # lazy: true
