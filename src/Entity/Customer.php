@@ -10,7 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
-#[UniqueEntity(fields: ["email"], message: "Cet email existe déjà")]
+#[ORM\UniqueConstraint(fields: ["email", "reseller"])]
+#[UniqueEntity(fields: ["email", "reseller"], message: "Cet email existe déjà")]
 #[ApiResource(
     normalizationContext:['groups'=> ['read:Customer']],
     denormalizationContext:['groups'=> ['write:Customer']],
@@ -26,8 +27,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
     attributes: [
         "pagination_partial" => true,
         "pagination-via-cursor" => ["field" => "id", "direction" => "DESC"],
-        "pagination_items_per_page" => 10],
-        security: "is_granted('IS_AUTHENTICATED_FULLY')"
+        "pagination_items_per_page" => 2,
+        "route_prefix" => "/v1"],
+        security: "is_granted('ROLE_USER')",
+    cacheHeaders:  [
+        "max_age" => 60,
+        "shared_max_age" => 120,
+        "vary" => ["Authorization", "Accept-Language"]]    
 )]
 class Customer 
 {
@@ -38,43 +44,44 @@ class Customer
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.')]
     #[Assert\Length(min:3, 
                     max:20,)]
-    #[Groups(['read:Customer'])]
+    #[Groups(['read:Customer','write:Customer'])]
+    #[Assert\Regex(
+        pattern: '^(?=.*[A-Z])(?=.*[a-z]).{3,}$^',
+        message: 'Le prénom peut contenir seulement des lettes !',
+    )]
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.')]
     #[Assert\Length(min:3, 
                     max:20,)]
     #[Groups(['read:Customer', 'write:Customer'])]
+    #[Assert\Regex(
+        pattern: '^(?=.*[A-Z])(?=.*[a-z]).{3,}$^',
+        message: 'Le nom peut contenir seulement des lettes !',
+    )]
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.')]
     #[Assert\Email(
         message: 'Cet e-mail {{ value }} n\'est pas un e-mail valide.',
     )]
     #[Groups(['read:Customer', 'write:Customer'])]
-    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
-    #[Assert\Email(
-        message: 'Cet e-mail {{ value }} n\'est pas un e-mail valide.',
-    )]
     private $email;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['read:Customer', 'write:Customer'])]
-    private $createdAt;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.',)]
+    #[Assert\NotBlank (message: 'Cet champs ne peut pas être vide.')]
     #[Groups(['read:Customer', 'write:Customer'])]
     private $adress;
 
     #[ORM\ManyToOne(targetEntity: Reseller::class, inversedBy: 'customers',  cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read:Customer'])]
+    #[Groups(['read:Customer', 'write:Customer'])]
     private $reseller;
 
     public function getId(): ?int
@@ -118,17 +125,6 @@ class Customer
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
 
     public function getAdress(): ?string
     {

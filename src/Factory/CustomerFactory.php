@@ -42,7 +42,6 @@ final class CustomerFactory extends ModelFactory
             'firstname' => self::faker()->firstName(),
             'lastname' => self::faker()->lastName(),
             'email' => self::faker()->email(),
-            'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTimeBetween('-100 days', '-1 days')),
             'adress' => self::faker()->streetAddress(),
             'reseller'=> ResellerFactory::random(),
         ];

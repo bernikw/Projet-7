@@ -5,13 +5,11 @@ namespace App\Doctrine;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
-
-use App\Entity\UserOwnedInterface;
+use App\Entity\Customer;
 use Doctrine\ORM\QueryBuilder;
-use ReflectionClass;
 use Symfony\Component\Security\Core\Security;
 
-/*
+
 
 final class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
@@ -27,9 +25,9 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
         QueryBuilder $queryBuilder, 
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        string $operationName = null
-    ){     
-        $this->addWhere($resourceClass, $queryBuilder);
+        string $operationName = null): void
+    {     
+        $this->addWhere($queryBuilder, $resourceClass);
     }
     
     public function applyToItem(QueryBuilder $queryBuilder, 
@@ -38,23 +36,24 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
         array $identifiers, string $operationName = null, 
         array $context = []): void
     {
-        $this->addWhere($resourceClass, $queryBuilder);
+        $this->addWhere($queryBuilder, $resourceClass);
     }
 
-    private function addWhere(string $resourceClass, QueryBuilder $queryBuilder)
+    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass,): void
     {
 
-        $reflectionClass = new ReflectionClass($resourceClass);
-        if ($reflectionClass->implementsInterface(UserOwnedInterface::class) || $this->security->isGranted('IS_AUTHENTICATED_FULLY') 
+      
+        if (Customer::class !== $resourceClass || !$this->security->isGranted('IS_AUTHENTICATED_FULLY') 
         || null === $user = $this->security->getUser()) {
+           
             return;
         }
-
-            $alias = $queryBuilder->getRootAliases()[0];
-              $queryBuilder
-                  ->andWhere("$alias.user = :current_user")
-                  ->setParameter('current_user', $user()->getId());     
-
+           
+        $alias = $queryBuilder->getRootAliases()[0];
+            
+        $queryBuilder->andWhere(sprintf('%s.reseller = :current_user', $alias));
+        $queryBuilder->setParameter('current_user', $user);  
+      
     }
 
-}*/
+}
