@@ -35,5 +35,5 @@ class PasswordEncoderSubscriber implements EventSubscriberInterface
             $hash = $this->encoder->hashPassword($result, $result->getPassword());
             $result->setPassword($hash);
         }
-    }
+    }    
 }

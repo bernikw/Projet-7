@@ -5,3 +5,6 @@ controllers:
 api_login_check:
     path: /api/login_check
 
+my_route:
+    path: /v1/foo/route
+    condition: "request.attributes.get('version') == 'v1'"
