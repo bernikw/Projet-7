@@ -25,13 +25,9 @@
     - Create database structure: symfony console make:migration
     - Insert fixtures data: symfony console doctrine:fixtures:load
 
-4. Login reseller 
-
-   1)   - email: jacobi.anais@keebler.com  
-        - password: tada
-
-   2)   - email: howell.jade@gmail.com
-        - password: tada
-
+4. Login reseller
+    - email: jacobi.anais@keebler.com, password: tada
+    - email: howell.jade@gmail.com, password: tada
+    
 5. Launch the site
     - symfony serve
