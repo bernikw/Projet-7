@@ -37,6 +37,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Customer 
 {
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -83,6 +85,7 @@ class Customer
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['read:Customer', 'write:Customer'])]
     private $reseller;
+
 
     public function getId(): ?int
     {
